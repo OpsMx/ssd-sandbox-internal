@@ -18,4 +18,4 @@ spec:
     spec:
       containers:
       - name: docker-swarm-visualizer
-        image: docker.io/opsmx11/docker-swarm-internal-production:6b628f7-8
+        image: opsmx11/docker-swarm-internal-production:6b628f7-8
