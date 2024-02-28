@@ -4,4 +4,4 @@ resources:
 - deployment.yaml
 images:
 - name: docker.io/opsmx11/docker-swarm-internal-production
-  newTag: 6b628f7-12
+  newTag: 6b628f7-13
