@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    moniker.spinnaker.io/application: '"spin"'
+    moniker.spinnaker.io/cluster: '"front50"'
+  labels:
+    app: spin
+    app.kubernetes.io/managed-by: halyard
+    app.kubernetes.io/name: front50
+    app.kubernetes.io/part-of: spinnaker
+    app.kubernetes.io/version: 1.30.1
+    cluster: spin-front50
+  name: spin-front50
+  namespace: ssd-spin
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: spin
+      cluster: spin-front50
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        moniker.spinnaker.io/application: spin
+      creationTimestamp: null
+      labels:
+        app: spin
+        app.kubernetes.io/managed-by: halyard
+        app.kubernetes.io/name: front50
+        app.kubernetes.io/part-of: spinnaker
+        app.kubernetes.io/version: 1.30.1
+        cluster: spin-front50
+        ssd.admissionreview.accountname: production
+        ssd.admissionreview.appname: ssd-spin
+    spec:
+      affinity: {}
+      containers:
+      - env:
+        - name: JAVA_OPTS
+          value: -XX:MaxRAMPercentage=100.0
+        image: quay.io/opsmxpublic/ubi8-front50-cve:1.30.11107
+        imagePullPolicy: IfNotPresent
+        lifecycle: {}
+        name: front50
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - wget
+            - --no-check-certificate
+            - --spider
+            - -q
+            - http://localhost:8080/health
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          requests:
+            cpu: 500m
+            memory: 650Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /opt/spinnaker/config
+          name: spin-front50-files-1713883263
+        - mountPath: /root/.aws
+          name: spin-front50-files-551245443
+        - mountPath: /home/spinnaker/.aws
+          name: spin-front50-files-551245443
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - name: spin-front50-files-551245443
+        secret:
+          defaultMode: 420
+          secretName: spin-front50-files-551245443
+      - name: spin-front50-files-1713883263
+        secret:
+          defaultMode: 420
+          secretName: spin-front50-files-1713883263
