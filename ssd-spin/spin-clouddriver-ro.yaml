@@ -13,8 +13,6 @@ metadata:
     cluster: spin-clouddriver-ro
   name: spin-clouddriver-ro
   namespace: ssd-spin
-  resourceVersion: "8140651"
-  uid: 0c909bbb-aa31-49f7-bd87-a07015cf4e7f
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
