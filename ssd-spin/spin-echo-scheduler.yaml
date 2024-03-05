@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    moniker.spinnaker.io/application: '"spin"'
+    moniker.spinnaker.io/cluster: '"echo-scheduler"'
+  labels:
+    app: spin
+    app.kubernetes.io/managed-by: halyard
+    app.kubernetes.io/name: echo-scheduler
+    app.kubernetes.io/part-of: spinnaker
+    app.kubernetes.io/version: 1.30.1
+    cluster: spin-echo-scheduler
+  name: spin-echo-scheduler
+  namespace: ssd-spin
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: spin
+      cluster: spin-echo-scheduler
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        moniker.spinnaker.io/application: spin
+      creationTimestamp: null
+      labels:
+        app: spin
+        app.kubernetes.io/managed-by: halyard
+        app.kubernetes.io/name: echo-scheduler
+        app.kubernetes.io/part-of: spinnaker
+        app.kubernetes.io/version: 1.30.1
+        cluster: spin-echo-scheduler
+    spec:
+      affinity: {}
+      containers:
+      - env:
+        - name: JAVA_OPTS
+          value: -XX:MaxRAMPercentage=100.0
+        - name: SPRING_PROFILES_ACTIVE
+          value: scheduler,local,scheduler-local
+        image: quay.io/opsmxpublic/ubi8-echo-cve:1.30.10105
+        imagePullPolicy: IfNotPresent
+        lifecycle: {}
+        name: echo-scheduler
+        ports:
+        - containerPort: 8089
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - wget
+            - --no-check-certificate
+            - --spider
+            - -q
+            - http://localhost:8089/health
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          requests:
+            cpu: 300m
+            memory: 128Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /opt/spinnaker/config
+          name: spin-echo-scheduler-files-518492871
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 60
+      volumes:
+      - name: spin-echo-scheduler-files-518492871
+        secret:
+          defaultMode: 420
+          secretName: spin-echo-scheduler-files-518492871
