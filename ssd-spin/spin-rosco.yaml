@@ -13,8 +13,6 @@ metadata:
     cluster: spin-rosco
   name: spin-rosco
   namespace: ssd-spin
-  resourceVersion: "8140882"
-  uid: 93b73606-35e2-4205-8696-cc7f674a43fc
 spec:
   progressDeadlineSeconds: 600
   replicas: 1
