@@ -1,0 +1,96 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    moniker.spinnaker.io/application: '"spin"'
+    moniker.spinnaker.io/cluster: '"clouddriver-ro"'
+  labels:
+    app: spin
+    app.kubernetes.io/managed-by: halyard
+    app.kubernetes.io/name: clouddriver-ro
+    app.kubernetes.io/part-of: spinnaker
+    app.kubernetes.io/version: 1.30.1
+    cluster: spin-clouddriver-ro
+  name: spin-clouddriver-ro
+  namespace: ssd-spin
+  resourceVersion: "8140651"
+  uid: 0c909bbb-aa31-49f7-bd87-a07015cf4e7f
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: spin
+      cluster: spin-clouddriver-ro
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        moniker.spinnaker.io/application: spin
+      creationTimestamp: null
+      labels:
+        app: spin
+        app.kubernetes.io/managed-by: halyard
+        app.kubernetes.io/name: clouddriver-ro
+        app.kubernetes.io/part-of: spinnaker
+        app.kubernetes.io/version: 1.30.1
+        cluster: spin-clouddriver-ro
+        ssd.admissionreview.accountname: production
+        ssd.admissionreview.appname: ssd-spin
+    spec:
+      affinity: {}
+      containers:
+      - env:
+        - name: JAVA_OPTS
+          value: -XX:MaxRAMPercentage=100.0
+        - name: SPRING_PROFILES_ACTIVE
+          value: ro,local,ro-local
+        image: quay.io/opsmxpublic/ubi8-clouddriver-cve:1.30.11107
+        imagePullPolicy: IfNotPresent
+        lifecycle: {}
+        name: clouddriver-ro
+        ports:
+        - containerPort: 7002
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - wget
+            - --no-check-certificate
+            - --spider
+            - -q
+            - http://localhost:7002/health
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          requests:
+            cpu: 500m
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /opt/spinnaker/config
+          name: spin-clouddriver-ro-files-1419103678
+        - mountPath: /etc/pki/ca-trust/extracted/java
+          name: oes-cacerts
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 720
+      volumes:
+      - name: spin-clouddriver-ro-files-1419103678
+        secret:
+          defaultMode: 420
+          secretName: spin-clouddriver-ro-files-1419103678
+      - name: oes-cacerts
+        secret:
+          defaultMode: 420
+          secretName: oes-cacerts
