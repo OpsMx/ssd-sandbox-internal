@@ -48,7 +48,7 @@ spec:
           value: -XX:MaxRAMPercentage=100.0
         - name: SPRING_PROFILES_ACTIVE
           value: rw,local,rw-local
-        image: quay.io/opsmxpublic/ubi8-clouddriver-cve:1.30.11107
+        image: quay.io/opsmxpublic/ubi8-clouddriver-cve:1.30.1226-dev
         imagePullPolicy: IfNotPresent
         lifecycle: {}
         name: clouddriver-rw
