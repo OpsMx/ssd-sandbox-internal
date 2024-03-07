@@ -48,7 +48,7 @@ spec:
           value: -XX:MaxRAMPercentage=100.0
         - name: SPRING_PROFILES_ACTIVE
           value: caching,local,caching-local
-        image: quay.io/opsmxpublic/ubi8-clouddriver-cve:1.30.1-b227b09-202403071055-dev
+        image: quay.io/opsmxpublic/ubi8-clouddriver-cve:1.30.1-b227b09-202403071055
         imagePullPolicy: IfNotPresent
         lifecycle: {}
         name: clouddriver-caching
