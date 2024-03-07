@@ -48,7 +48,7 @@ spec:
           value: -XX:MaxRAMPercentage=100.0
         - name: SPRING_PROFILES_ACTIVE
           value: scheduler,local,scheduler-local
-        image: quay.io/opsmxpublic/ubi8-echo-cve:1.30.10105
+        image: quay.io/opsmxpublic/ubi8-echo-cve:1.30.1306
         imagePullPolicy: IfNotPresent
         lifecycle: {}
         name: echo-scheduler
