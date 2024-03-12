@@ -46,7 +46,7 @@ spec:
       - env:
         - name: JAVA_OPTS
           value: -XX:MaxRAMPercentage=100.0
-        image: quay.io/opsmxpublic/ubi8-front50-cve:1.30.1306
+        image: quay.io/opsmxpublic/ubi8-front50-cve:1.30.1-bb5fcad-202403060611
         imagePullPolicy: IfNotPresent
         lifecycle: {}
         name: front50
