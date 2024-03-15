@@ -5,3 +5,5 @@ resources:
 images:
 - name: opsmx11/docker-swarm-internal-dev
   newTag: 6b628f7-38
+- name: docker.io/opsmx11/docker-swarm-internal-dev
+  newTag: 6b628f7-38
