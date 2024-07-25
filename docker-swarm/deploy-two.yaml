@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: docker-swarm
+  name: docker-swarm
+spec:
+  selector:
+    matchLabels:
+      app: docker-swarm
+  replicas: 1 # tells deployment to run 2 pods matching the template
+  template:
+    metadata:
+      labels:
+        app: docker-swarm
+    spec:
+      containers:
+      - name: docker-swarm
+        image: docker.io/opsmx11/docker-swarm:9839424-12
